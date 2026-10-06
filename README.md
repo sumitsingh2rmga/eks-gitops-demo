@@ -21,8 +21,8 @@ git push → GitHub Actions: lint → unit tests → build image → container s
 1. Create a **public** GitHub repo named `eks-gitops-demo` (public avoids giving Argo CD repo credentials).
 2. Docker Hub: Account Settings → Security → **New Access Token** (Read & Write).
 3. GitHub repo → Settings → Secrets and variables → Actions → add:
-   - `DOCKERHUB_USERNAME`  - sumitsinghrmga, docker login -u sumitsinghrmga
-   - `DOCKERHUB_TOKEN`  - dckr_pat_-twsYVrqD2cffGhCKbIyZ8tReWM
+   - `DOCKERHUB_USERNAME`
+   - `DOCKERHUB_TOKEN`
 4. Settings → Actions → General → Workflow permissions: **Read and write** (needed for the CI bot commit).
 5. Edit `argocd/application.yaml` and set `repoURL` to your repo, then push this project to `main`.
    The first CI run builds and pushes `DOCKERHUB_USER/myapp` (Docker Hub creates the repo as public on first push).
