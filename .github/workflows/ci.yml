@@ -42,8 +42,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets::sumitsinghrmga }}
-          password: ${{ secrets::DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Step 6: Build the Docker image from app/Dockerfile and push to Docker Hub
       - name: Build and Push Docker Image
