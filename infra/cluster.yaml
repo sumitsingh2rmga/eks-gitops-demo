@@ -1,0 +1,18 @@
+# Minimum-cost EKS: 1 small node, public subnets, NO NAT gateway, NO load balancers.
+# "version" is omitted on purpose so eksctl uses its newest supported (standard-support) version.
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: gitops-demo
+  region: ap-south-1          # Mumbai; change if you prefer another region
+vpc:
+  nat:
+    gateway: Disable          # eksctl creates a paid NAT gateway by default
+managedNodeGroups:
+  - name: ng-1
+    instanceType: t3.medium   # 2 vCPU / 4 GB; Argo CD needs more than a t3.small
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+    volumeSize: 20
+    privateNetworking: false  # nodes in public subnets, so no NAT is needed
