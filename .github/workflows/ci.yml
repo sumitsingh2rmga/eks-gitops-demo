@@ -32,27 +32,49 @@ jobs:
           pytest app/test_app.py || python -m pytest app/test_app.py
 
   build-and-push-docker:
-    needs: build-and-test # This stage runs ONLY if the tests pass successfully
+    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 5: Log into Docker Hub using secrets configured in GitHub Settings
+      # 1. Build the Docker image LOCALLY on the runner first (push: false)
+      - name: Build Docker Image Locally
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          file: ./app/Dockerfile
+          push: false
+          load: true # This loads the image into the local Docker daemon so Trivy can see it
+          tags: |
+            sumitsinghrmga/eks-gitops-demo:latest
+            sumitsinghrmga/eks-gitops-demo:${{ github.sha }}
+
+      # 2. Scan the local image BEFORE pushing
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'sumitsinghrmga/eks-gitops-demo:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1' # Fails the pipeline right here if vulnerabilities are found
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      # 3. Log into Docker Hub ONLY after the scan passes successfully
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.SUMITSINGHRMGA }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 6: Build the Docker image from app/Dockerfile and push to Docker Hub
-      - name: Build and Push Docker Image
+      # 4. Final Step: Push the safe image to Docker Hub
+      - name: Push Docker Image to Registry
         uses: docker/build-push-action@v5
         with:
-          context: ./app # Targets the app/ directory where Dockerfile resides
+          context: ./app
           file: ./app/Dockerfile
           push: true
-          # Replace 'your-dockerhub-username' with your actual Docker Hub profile username
           tags: |
             sumitsinghrmga/eks-gitops-demo:latest
             sumitsinghrmga/eks-gitops-demo:${{ github.sha }}
