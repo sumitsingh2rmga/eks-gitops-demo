@@ -29,6 +29,7 @@ A hands-on lab that takes a small Python web app from a `git push` all the way t
 
 ## 1. The big picture
 
+
 ```mermaid
 flowchart LR
   A[You: git push] --> B[GitHub repo]
