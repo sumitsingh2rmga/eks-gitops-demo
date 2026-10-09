@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 
 app = Flask(__name__)
-VERSION = os.getenv("APP_VERSION", "v1")
+VERSION = os.getenv("APP_VERSION", "v2")
 
 
 @app.get("/")
