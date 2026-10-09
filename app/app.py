@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 
 app = Flask(__name__)
-VERSION = os.getenv("APP_VERSION", "v1")
+VERSION = os.getenv("APP_VERSION", "v4")
 
 
 @app.get("/")
@@ -12,8 +12,7 @@ def home():
 
 @app.get("/health")
 def health():
-    # Simulate a broken application release by returning HTTP 500 Internal Server Error
-    return jsonify(status="error"), 500
+    return jsonify(status="ok")
 
 
 if __name__ == "__main__":
