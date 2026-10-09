@@ -6,4 +6,4 @@ resources:
 images:
   - name: myapp
     newName: sumitsinghrmga/eks-gitops-demo
-    newTag: "923529e348d8801af797a9ef9c455101f4eb155e"
+    newTag: "996d3db01b1e43ccf7fb24c015a38efa88859a4a"
