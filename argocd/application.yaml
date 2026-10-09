@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git remote add origin https://github.com/sumitsingh2rmga/eks-gitops-demo.git
+    repoURL: https://github.com/sumitsingh2rmga/eks-gitops-demo.git
     targetRevision: main
     path: k8s/overlays/dev
   destination:
